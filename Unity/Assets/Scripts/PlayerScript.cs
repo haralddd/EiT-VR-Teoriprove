@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem.UI;
 
 public class PlayerScript : MonoBehaviour
 {
     // Get UI Multiple Choice Canvas object
     public GameObject multipleChoiceCanvas;
+    public TMP_Text scoreNumber;
     public int score;
     void Start()
     {
         // Hide the Multiple Choice Canvas
         multipleChoiceCanvas.SetActive(false);
+        multipleChoiceCanvas.GetComponent<MultipleChoiceMenu>().correctAnswerEvent.AddListener(CorrectAnswer);
+        multipleChoiceCanvas.GetComponent<MultipleChoiceMenu>().wrongAnswerEvent.AddListener(WrongAnswer);
         score = 0;
     }
 
@@ -39,7 +45,19 @@ public class PlayerScript : MonoBehaviour
 
     public void CorrectAnswer()
     {
-        Debug.Log("Correct Answer");
+        Debug.Log("From player: Correct Answer");
+        multipleChoiceCanvas.SetActive(false);
         score++;
+        
+        scoreNumber.text = "" + score;
+
+    }
+
+    public void WrongAnswer()
+    {
+        // TODO: Do some instructive shit
+        Debug.Log("From player: Wrong Answer");
+        multipleChoiceCanvas.SetActive(false);
+
     }
 }

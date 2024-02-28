@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class MultipleChoiceMenu : MonoBehaviour
 {
@@ -11,10 +12,19 @@ public class MultipleChoiceMenu : MonoBehaviour
     public GameObject panel;
     public TMP_Text questionText;
     public int correctAnswer;
+    public UnityEvent wrongAnswerEvent;
+    public UnityEvent correctAnswerEvent;
 
     void Start()
     {
+        if (wrongAnswerEvent == null)
+            wrongAnswerEvent = new UnityEvent();
+        if (correctAnswerEvent == null)
+            correctAnswerEvent = new UnityEvent();
         toggleButton.onClick.AddListener(TogglePanelVisibility);
+        foreach (Button button in answerButtons) {
+            button.onClick.AddListener(CheckAnswer);
+        }
     }
 
     // Update is called once per frame
@@ -53,16 +63,14 @@ public class MultipleChoiceMenu : MonoBehaviour
 
     public void CheckAnswer(int answer)
     {
-        Debug.Log("Clicked: " + answer);
-        Debug.Log("Correct: " + correctAnswer);
+        Debug.Log("Clicked: " + answer + "\t Correct: " + correctAnswer);
         if (answer == correctAnswer)
         {
-            
-            Debug.Log("Correct Answer");
+            correctAnswerEvent.Invoke();
         }
         else
         {
-            Debug.Log("Wrong Answer");
+            wrongAnswerEvent.Invoke();
         }
     }
 }
